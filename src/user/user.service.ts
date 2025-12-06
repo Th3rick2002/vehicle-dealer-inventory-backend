@@ -1,18 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserRepository } from './user.repository';
+import { RoleService } from '../role/role.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly roleService: RoleService
+    ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    const user = await this.userRepository.findUserByEmail(createUserDto.email);
+
+    if (user) {
+      throw new ConflictException('El usuario con este correo ya existe');
+    }
+
+    const role = await this.roleService.findOne(createUserDto.role);
+
+    if (!role) {
+      throw new NotFoundException('El rol no existe.')
+    }
+
+    return this.userRepository.create(createUserDto);
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userRepository.findAll();
   }
 
   async findOne(id: string) {
@@ -23,11 +39,38 @@ export class UserService {
     return this.userRepository.findUserByEmail(email);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findUser(id);
+
+    if (!user ) {
+      throw new NotFoundException('El usuario no existe.');
+    }
+
+    if (updateUserDto.email) {
+      const validEmialInOtherUser = await this.userRepository.emailExistsForOtherUser(updateUserDto.email, id);
+
+      if (validEmialInOtherUser) {
+        throw new ConflictException('El correo ya existe en otro usuario.');
+      }
+    }
+
+    if (updateUserDto.role) {
+      const role = await this.roleService.findOne(updateUserDto.role);
+
+      if (!role) {
+        throw new NotFoundException('El rol no existe.')
+      }
+    }
+
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.userRepository.findUser(id);
+
+    if (!user ) {
+      throw new NotFoundException('El usuario no existe.');
+    }
+
+    return this.userRepository.softDelete(id);
   }
 }
