@@ -63,8 +63,38 @@ export class ModelService {
     return this.modelRepository.findByName(name);
   }
 
-  update(id: number, updateModelDto: UpdateModelDto) {
-    return `This action updates a #${id} model`;
+  async update(id: number, updateModelDto: UpdateModelDto) {
+    const model = await this.modelRepository.findById(id);
+
+    if (!model) {
+      throw new BadRequestException(`El modelo con id ${id} no existe.`);
+    }
+
+    if (updateModelDto.made_in) {
+      const country = await this.countryRepository.findById(
+        updateModelDto.made_in,
+      );
+
+      if (!country) {
+        throw new BadRequestException(
+          `El pais con id ${updateModelDto.made_in} no existe.`,
+        );
+      }
+    }
+
+    if (updateModelDto.id_brand) {
+      const brand = await this.brandRepository.findById(
+        updateModelDto.id_brand,
+      );
+
+      if (!brand) {
+        throw new BadRequestException(
+          `La marca con id ${updateModelDto.id_brand} no existe.`,
+        );
+      }
+    }
+
+    return await this.modelRepository.update(id, updateModelDto);
   }
 
   async remove(id: number) {

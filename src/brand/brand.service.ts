@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, } from '@nestjs/common';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { BrandRepository } from './brand.repository';
@@ -58,8 +53,26 @@ export class BrandService {
     return brand;
   }
 
-  update(id: number, updateBrandDto: UpdateBrandDto) {
-    return `This action updates a #${id} brand`;
+  async update(id: number, updateBrandDto: UpdateBrandDto) {
+    const brand = await this.brandRepository.findById(id);
+
+    if (!brand) {
+      throw new NotFoundException(`La marca con id ${id} no existe.`);
+    }
+
+    if (updateBrandDto.id_country) {
+      const country = await this.countryRepository.findById(
+        updateBrandDto.id_country,
+      );
+
+      if (!country) {
+        throw new BadRequestException(
+          `El pais con id ${updateBrandDto.id_country} no existe.`,
+        );
+      }
+    }
+
+    return await this.brandRepository.update(id, updateBrandDto);
   }
 
   async remove(id: number) {

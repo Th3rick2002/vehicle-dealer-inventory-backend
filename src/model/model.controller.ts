@@ -113,8 +113,11 @@ export class ModelController {
     description: 'Modelo no encontrado',
   })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateModelDto: UpdateModelDto) {
-    return this.modelService.update(+id, updateModelDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateModelDto: UpdateModelDto,
+  ) {
+    return this.modelService.update(id, updateModelDto);
   }
 
   @ApiOperation({ summary: 'Eliminar un modelo (soft delete)' })
@@ -127,7 +130,7 @@ export class ModelController {
     description: 'Modelo no encontrado',
   })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.modelService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.modelService.remove(id);
   }
 }
