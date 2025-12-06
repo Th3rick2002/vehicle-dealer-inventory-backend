@@ -28,4 +28,21 @@ export class ColorRepository {
       throw error;
     }
   }
+
+  async findById(id: number): Promise<Color | null> {
+    const query = `
+        SELECT 
+          id_color,
+          name_color 
+        FROM color
+        WHERE id_color = $1
+    `;
+
+    try {
+      return await this.dataSource.query(query, [id]);
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
 }

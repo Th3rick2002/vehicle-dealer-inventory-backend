@@ -8,4 +8,8 @@ export class ColorService {
   findAll() {
     return this.colorRepository.findAll();
   }
+
+  findById(id: number) {
+    return this.colorRepository.findById(id);
+  }
 }

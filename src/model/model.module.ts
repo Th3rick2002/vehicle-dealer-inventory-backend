@@ -10,5 +10,6 @@ import { ColorModule } from '../color/color.module';
   imports: [CountryModule, ColorModule, BrandModule],
   controllers: [ModelController],
   providers: [ModelService, ModelRepository],
+  exports: [ModelService, ModelRepository],
 })
 export class ModelModule {}
