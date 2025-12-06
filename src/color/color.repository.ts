@@ -15,10 +15,10 @@ export class ColorRepository {
   async findAll(): Promise<Color[]> {
     const query = `
         SELECT 
-          idColor, 
+          id_color,
           name_color 
         FROM color
-        ORDER BY idColor
+        ORDER BY id_color
     `;
 
     try {

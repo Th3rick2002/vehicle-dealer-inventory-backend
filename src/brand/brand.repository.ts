@@ -80,8 +80,7 @@ export class BrandRepository {
     query += `) AS exists`;
 
     try {
-      const result: boolean = await this.dataSource.query(query, params);
-      return result[0].exists;
+      return await this.dataSource.query(query, params);
     } catch (error) {
       this.logger.error('Error al verificar existencia de marca', error);
       throw error;
@@ -134,8 +133,7 @@ export class BrandRepository {
     }
 
     if (updates.length === 0) {
-      const current: BrandWithRelations | null = await this.findById(id);
-      return current;
+      return await this.findById(id);
     }
 
     updates.push(`update_at = CURRENT_TIMESTAMP`);
@@ -153,8 +151,7 @@ export class BrandRepository {
     `;
 
     try {
-      const result = await this.dataSource.query(query, values);
-      return result[0] || null;
+      return await this.dataSource.query(query, values);
     } catch (error) {
       this.logger.error(`Error al actualizar marca con ID ${id}`, error);
       throw error;
@@ -170,8 +167,7 @@ export class BrandRepository {
     `;
 
     try {
-      const result = await this.dataSource.query(query, [id]);
-      return result.length > 0;
+      return await this.dataSource.query(query, [id]);
     } catch (error) {
       this.logger.error(`Error al eliminar marca con ID ${id}`, error);
       throw error;

@@ -4,9 +4,10 @@ import { ModelController } from './model.controller';
 import { CountryModule } from '../country/country.module';
 import { BrandModule } from '../brand/brand.module';
 import { ModelRepository } from './model.repository';
+import { ColorModule } from '../color/color.module';
 
 @Module({
-  imports: [CountryModule, BrandModule],
+  imports: [CountryModule, ColorModule, BrandModule],
   controllers: [ModelController],
   providers: [ModelService, ModelRepository],
 })

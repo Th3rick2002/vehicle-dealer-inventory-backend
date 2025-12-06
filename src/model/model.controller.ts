@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ModelService } from './model.service';
 import { CreateModelDto } from './dto/create-model.dto';
@@ -16,12 +17,20 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ColorService } from '../color/color.service';
+import { CreateColorDto } from '../color/dto/create-color.dto';
+import { CountryService } from '../country/country.service';
+import { CreateCountryDto } from '../country/dto/create-country.dto';
 
 @ApiTags('Modelos')
 @ApiExtraModels(CreateModelDto, UpdateModelDto)
 @Controller('model')
 export class ModelController {
-  constructor(private readonly modelService: ModelService) {}
+  constructor(
+    private readonly modelService: ModelService,
+    private readonly colorService: ColorService,
+    private readonly CountryService: CountryService,
+  ) {}
 
   @ApiOperation({ summary: 'Crear un nuevo modelo' })
   @ApiResponse({
@@ -57,16 +66,66 @@ export class ModelController {
     return this.modelService.findAll();
   }
 
+  @ApiOperation({ summary: 'Obtener todos los colores de los modelos' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de colores obtenida exitosamente',
+    type: [CreateColorDto],
+  })
+  @Get('colors')
+  findColorsModels() {
+    return this.colorService.findAll();
+  }
+
+  @ApiOperation({ summary: 'Obtener todos los paises de los modelos' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de paises obtenida exitosamente',
+    type: [CreateCountryDto],
+  })
+  @Get('countries')
+  findCountryModels() {
+    return this.CountryService.findAll();
+  }
+
+  @ApiOperation({ summary: 'Obtener un vehiculo por su id' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.modelService.findOne(+id);
   }
 
+  @ApiOperation({
+    summary: 'Obtener un modelo por el nombre de la marca especificada',
+  })
+  @Get('brad/:name')
+  findByBrand(@Param('name') name: string) {
+    return this.modelService.findByName(name);
+  }
+
+  @ApiOperation({ summary: 'Actualizar un modelo existente' })
+  @ApiResponse({
+    status: 200,
+    description: 'Modelo actualizado exitosamente',
+    type: UpdateModelDto,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Modelo no encontrado',
+  })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateModelDto: UpdateModelDto) {
     return this.modelService.update(+id, updateModelDto);
   }
 
+  @ApiOperation({ summary: 'Eliminar un modelo (soft delete)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Modelo eliminado exitosamente',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Modelo no encontrado',
+  })
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.modelService.remove(+id);
