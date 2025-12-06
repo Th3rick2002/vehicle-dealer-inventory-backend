@@ -7,6 +7,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('/api/v1');
 
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PATCH,POST,DELETE',
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Vehicle Dealer Inventory')
     .setDescription('API for Vehicle Dealer Inventory')
