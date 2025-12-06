@@ -10,6 +10,7 @@ import { ModelModule } from './model/model.module';
 import { VehicleModule } from './vehicle/vehicle.module';
 import { CommonModule } from './common/common.module';
 import { EnvConfig } from './config/app.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { EnvConfig } from './config/app.config';
     ModelModule,
     VehicleModule,
     CommonModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

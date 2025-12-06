@@ -12,6 +12,17 @@ async function bootstrap() {
     .setDescription('API for Vehicle Dealer Inventory')
     .setVersion('1.0')
     .addTag('Inventory')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Ingresa el jwt',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
