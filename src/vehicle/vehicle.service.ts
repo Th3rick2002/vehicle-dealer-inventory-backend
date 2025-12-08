@@ -14,9 +14,7 @@ export class VehicleService {
   ) {}
 
   async create(createVehicleDto: CreateVehicleDto) {
-    const existsByEngineNumber = await this.validateEngineNumber(
-      createVehicleDto.engine_number,
-    );
+    const existsByEngineNumber = await this.vehicleRepository.existsByEngineNumber(createVehicleDto.engine_number);
 
     if (existsByEngineNumber) {
       throw new BadRequestException(

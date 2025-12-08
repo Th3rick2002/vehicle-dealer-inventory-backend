@@ -1,5 +1,5 @@
 export enum StatusVehicleEnum {
-  'En_Transito' = 'En Transito',
+  'En_Transito' = 'En_Transito',
   'En_Preparacion' = 'En_Preparacion',
   'Disponible' = 'Disponible',
   'Reservado' = 'Reservado',

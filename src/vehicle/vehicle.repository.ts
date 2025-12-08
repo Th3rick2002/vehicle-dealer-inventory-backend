@@ -269,7 +269,8 @@ export class VehicleRepository {
     query += `) as exists`;
 
     try {
-      return await this.dataSource.query(query, params);
+      const result = await this.dataSource.query(query, params);
+      return result[0]?.exists === true;
     } catch (error) {
       this.logger.error('Error al verificar existencia de VIN', error);
       throw error;
@@ -297,7 +298,8 @@ export class VehicleRepository {
     query += `) as exists`;
 
     try {
-      return await this.dataSource.query(query, params);
+      const result = await this.dataSource.query(query, params);
+      return result[0]?.exists === true;
     } catch (error) {
       this.logger.error(
         'Error al verificar existencia de número de motor',
