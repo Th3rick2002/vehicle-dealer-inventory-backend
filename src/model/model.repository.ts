@@ -20,7 +20,7 @@ export class ModelRepository {
   ): Promise<Model> {
     const query = `
       INSERT INTO model (name_model, engine_type, gearbox, number_of_speeds, maximum_speed, traction, cubic_capacity, width, height, power, battery, seats, made_in, id_brand)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING
         id_model,
         name_model,

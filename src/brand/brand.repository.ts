@@ -24,12 +24,10 @@ export class BrandRepository {
       INNER JOIN country AS C ON B.id_country = C.id_country
       WHERE B.delete_at IS NULL
       ORDER BY id_brand
-      LIMIT $1
-      OFFSET $2
     `;
 
     try {
-      return await this.dataSource.query(query, [limit, offset]);
+      return await this.dataSource.query(query);
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -80,7 +78,8 @@ export class BrandRepository {
     query += `) AS exists`;
 
     try {
-      return await this.dataSource.query(query, params);
+      const result = await this.dataSource.query(query, params);
+      return result[0]?.exists === true;
     } catch (error) {
       this.logger.error('Error al verificar existencia de marca', error);
       throw error;

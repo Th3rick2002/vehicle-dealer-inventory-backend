@@ -1,13 +1,14 @@
 export enum engineEnum {
-  'Gasolina' = 'GASOLINA',
-  'Diesel' = 'DIESEL',
-  'Electrico' = 'ELECTRICO',
-  'Hibrido' = 'HIBRIDO',
+  'Gasolina' = 'Gasolina',
+  'Diesel' = 'Diesel',
+  'Electrico' = 'Electrico',
+  'Hibrido' = 'Hibrido',
 }
 
+
 export enum gearboxEnum {
-  'Manual' = 'MANUAL',
-  'Automatico' = 'AUTOMATICO',
+  'Manual' = 'Manual',
+  'Automatica' = 'Automatica',
 }
 
 export enum tractionEnum {
